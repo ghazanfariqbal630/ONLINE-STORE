@@ -1,6 +1,6 @@
 // Store settings — change these to your own details
 const STORE = {
-  name: "Northern Bazar",
+  name: "Asaan Digital Bazaar",
   tagline: "Handmade treasures from the mountains",
   phone: "+92 300 0000000",
   whatsapp: "923000000000", // country code + number, no + or spaces

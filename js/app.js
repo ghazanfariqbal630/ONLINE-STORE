@@ -89,7 +89,7 @@ function renderHeader() {
     </div>
   </div>
   <div class="mainbar wrap">
-    <a href="index.html" class="logo">⛰️ ${STORE.name}</a>
+    <a href="index.html" class="logo">🛍️ ${STORE.name}</a>
     <form class="search" action="shop.html">
       <input name="q" placeholder="Search for shawls, jewelry, shilajit..." value="${params.get("q") || ""}">
       <button aria-label="Search">🔍</button>
@@ -126,7 +126,7 @@ function renderFooter() {
   <footer class="footer" id="contact">
     <div class="wrap cols">
       <div>
-        <div class="logo">⛰️ ${STORE.name}</div>
+        <div class="logo">🛍️ ${STORE.name}</div>
         <p>${STORE.tagline}. Handicrafts, jewelry, organic food and more — delivered to your door.</p>
       </div>
       <div>
