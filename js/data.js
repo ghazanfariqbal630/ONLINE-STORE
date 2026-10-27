@@ -4,7 +4,7 @@ const STORE = {
   tagline: "Handmade treasures from the mountains",
   phone: "+92 306 6088303",
   whatsapp: "923066088303", // country code + number, no + or spaces
-  email: "info@yourstore.com",
+  email: "ghazanfariqbal630@gmail.com",
   address: "Your address, City, Pakistan",
   currency: "PKR",
   deliveryFee: 250,
