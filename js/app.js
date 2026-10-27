@@ -55,10 +55,11 @@ function toast(msg) {
 }
 
 // ---------- shared UI ----------
+// Photo comes from p.image, or else images/<id>.jpg; if that file is missing the icon is shown
 function productImage(p, cls = "") {
-  return p.image
-    ? `<img class="pimg ${cls}" src="${p.image}" alt="${p.name}" loading="lazy">`
-    : `<div class="pimg ${cls}" style="background:${catById(p.cat).color}"><span>${p.icon}</span></div>`;
+  const icon = `<div class="pimg ${cls}" style="background:${catById(p.cat).color}"><span>${p.icon}</span></div>`;
+  const src = p.image || `images/${p.id}.jpg`;
+  return `<img class="pimg ${cls}" src="${src}" alt="${p.name}" loading="lazy" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${icon.replace(/'/g, "&#39;")}'>`;
 }
 
 function productCard(p) {
