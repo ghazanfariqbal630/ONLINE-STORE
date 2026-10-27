@@ -313,6 +313,14 @@ function cartPage() {
 // ---------- boot ----------
 renderHeader();
 renderFooter();
+function pinHeader() {
+  const h = $("#header"), topbar = $(".topbar");
+  h.style.top = `-${topbar.offsetHeight}px`;
+  document.documentElement.style.setProperty("--header-h", `${h.offsetHeight - topbar.offsetHeight}px`);
+}
+pinHeader();
+addEventListener("resize", pinHeader);
+addEventListener("scroll", () => $("#header").classList.toggle("scrolled", scrollY > 40), { passive: true });
 document.querySelectorAll("[data-arrow]").forEach((el) => (el.outerHTML = icon("arrow", 16)));
 document.querySelectorAll("[data-icon]").forEach((el) => el.insertAdjacentHTML("afterbegin", icon(el.dataset.icon, 160, "bg")));
 const page = document.body.dataset.page;
