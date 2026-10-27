@@ -3,10 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Asaan Digital Bazaar | Online Shopping</title>
-  <meta name="description" content="Handicrafts, jewelry, shawls, gemstones and organic products delivered across Pakistan.">
+  <title>Asaan Digital Bazaar | Online Shopping in Pakistan</title>
+  <meta name="description" content="Handicrafts, jewelry, shawls, gemstones and organic products delivered across Pakistan with Cash on Delivery.">
+  <meta name="theme-color" content="#0e4a3c">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%230e4a3c'/%3E%3Cpath d='M12 15h16l-1.4 14.2a2 2 0 0 1-2 1.8h-9.2a2 2 0 0 1-2-1.8z' fill='none' stroke='%23c9973f' stroke-width='2.2'/%3E%3Cpath d='M16 15v-1.5a4 4 0 0 1 8 0V15' fill='none' stroke='%23fff' stroke-width='2.2'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body data-page="home">
@@ -15,62 +18,70 @@
   <main class="wrap">
     <section class="hero">
       <div class="hero-main">
-        <span class="eyebrow">New season collection</span>
-        <h1>Handmade treasures<br>from the mountains</h1>
-        <p>Pashmina shawls, silver jewelry, gemstones and pure organic food — straight from local artisans to your door.</p>
-        <div><a href="shop.html" class="btn btn-accent">Shop now</a></div>
-        <span class="art">⛰️</span>
+        <span class="eyebrow">★ New season collection 2026</span>
+        <h1>Authentic handmade goods, <em>delivered easy.</em></h1>
+        <p>Pashmina shawls, silver jewelry, natural gemstones and pure organic food — sourced from trusted artisans and delivered to your door.</p>
+        <div class="hero-cta">
+          <a href="shop.html" class="btn btn-gold">Shop now <i data-arrow></i></a>
+          <a href="shop.html?sale=1" class="btn btn-ghost">View offers</a>
+        </div>
+        <div class="hero-stats">
+          <div><b>100%</b><span>Authentic products</span></div>
+          <div><b>COD</b><span>Pay on delivery</span></div>
+          <div><b>7 Days</b><span>Easy returns</span></div>
+        </div>
       </div>
       <div class="hero-side">
-        <a href="shop.html?sale=1" class="promo p1">
+        <a href="shop.html?sale=1" class="promo p1" data-icon="gems">
           <small>Up to 20% off</small>
           <h3>Winter Sale</h3>
-          <span>Shop discounted products →</span>
+          <span>Shop discounted <i data-arrow></i></span>
         </a>
-        <a href="shop.html?cat=organic" class="promo p2">
+        <a href="shop.html?cat=organic" class="promo p2" data-icon="organic">
           <small>100% natural</small>
-          <h3>Organic Products</h3>
-          <span>Dried fruits, honey & oils →</span>
+          <h3>Organic Pantry</h3>
+          <span>Dried fruits, honey & oils <i data-arrow></i></span>
         </a>
       </div>
     </section>
 
     <section class="sec">
-      <div class="sec-head"><h2 class="sec-title">Shop by Category</h2></div>
+      <div class="sec-head"><div><span class="kicker">Browse</span><h2 class="sec-title">Shop by category</h2></div></div>
       <div class="cat-grid" id="catGrid"></div>
     </section>
 
     <section class="sec">
-      <div class="sec-head"><h2 class="sec-title">Featured Products</h2><a href="shop.html">View all →</a></div>
+      <div class="sec-head"><div><span class="kicker">Hand-picked</span><h2 class="sec-title">Featured products</h2></div><a href="shop.html">View all <i data-arrow></i></a></div>
       <div class="grid" id="featured"></div>
     </section>
 
-    <section class="sec strip">
+    <section class="sec strip" data-icon="truck">
       <div>
         <h2>Cash on Delivery all over Pakistan</h2>
-        <p>Order today — pay when it arrives at your door.</p>
+        <p>Order today — pay only when your parcel arrives at your door.</p>
       </div>
-      <a href="shop.html" class="btn btn-accent">Start shopping</a>
+      <a href="shop.html" class="btn">Start shopping <i data-arrow></i></a>
     </section>
 
     <section class="sec">
-      <div class="sec-head"><h2 class="sec-title">New Arrivals</h2><a href="shop.html?sort=new">View all →</a></div>
+      <div class="sec-head"><div><span class="kicker">Just in</span><h2 class="sec-title">New arrivals</h2></div><a href="shop.html?sort=new">View all <i data-arrow></i></a></div>
       <div class="grid" id="newArrivals"></div>
     </section>
 
     <section class="sec">
-      <div class="sec-head"><h2 class="sec-title">Best Selling</h2><a href="shop.html">View all →</a></div>
+      <div class="sec-head"><div><span class="kicker">Customer favourites</span><h2 class="sec-title">Best selling</h2></div><a href="shop.html">View all <i data-arrow></i></a></div>
       <div class="grid" id="bestSelling"></div>
     </section>
 
     <section class="sec">
-      <div class="sec-head"><h2 class="sec-title">Top Rated</h2><a href="shop.html?sort=rating">View all →</a></div>
+      <div class="sec-head"><div><span class="kicker">Highly reviewed</span><h2 class="sec-title">Top rated</h2></div><a href="shop.html?sort=rating">View all <i data-arrow></i></a></div>
       <div class="grid" id="topRated"></div>
     </section>
   </main>
 
   <div id="footer"></div>
   <script src="js/data.js"></script>
+  <script src="js/icons.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
