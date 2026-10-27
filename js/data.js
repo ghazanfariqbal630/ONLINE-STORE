@@ -2,8 +2,8 @@
 const STORE = {
   name: "Asaan Digital Bazaar",
   tagline: "Handmade treasures from the mountains",
-  phone: "+92 300 0000000",
-  whatsapp: "923000000000", // country code + number, no + or spaces
+  phone: "+92 306 6088303",
+  whatsapp: "923066088303", // country code + number, no + or spaces
   email: "info@yourstore.com",
   address: "Your address, City, Pakistan",
   currency: "PKR",
