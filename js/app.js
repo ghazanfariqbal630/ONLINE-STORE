@@ -363,12 +363,21 @@ function productPage() {
         <a class="link" href="https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent("Assalam o Alaikum, I want to ask about: " + p.name)}" target="_blank" rel="noopener">${icon("phone", 18)} Ask on WhatsApp</a>
       </div>
       ${shareBar(p)}
-      <ul class="perks">
-        <li>${icon("truck", 20)}<span><b>Delivery in 3–5 working days</b>All over Pakistan</span></li>
-        <li>${icon("cash", 20)}<span><b>Cash on Delivery</b>Pay when you receive</span></li>
-        <li>${icon("return", 20)}<span><b>7 days easy return</b>If item is not as described</span></li>
-      </ul>
     </div>
+    <aside class="pd-side">
+      <ul class="perks">
+        <li>${icon("truck", 20)}<span><b>Fast delivery</b>3–5 days, all over Pakistan</span></li>
+        <li>${icon("cash", 20)}<span><b>Cash on Delivery</b>Pay when you receive</span></li>
+        <li>${icon("return", 20)}<span><b>7 days return</b>If item is not as described</span></li>
+        <li>${icon("badge", 20)}<span><b>100% authentic</b>Quality checked</span></li>
+      </ul>
+      <div class="seller-box">
+        <span class="avatar">${p.seller.split(" ").map((w) => w[0]).slice(0, 2).join("")}</span>
+        <b>${p.seller}</b>
+        <small>${((n) => `${n} product${n === 1 ? "" : "s"}`)(PRODUCTS.filter((x) => x.seller === p.seller).length)}</small>
+        <a class="btn full" href="https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent("Assalam o Alaikum, I want to ask about: " + p.name)}" target="_blank" rel="noopener">${WHATSAPP_SVG.replace(/28/g, "18")} Chat with us</a>
+      </div>
+    </aside>
   </div>
   <div class="sec-head"><h2 class="sec-title">You may also like</h2></div>
   <div class="grid">${related.map(productCard).join("")}</div>`;

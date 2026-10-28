@@ -522,13 +522,21 @@ select { padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); 
 .total-line { margin: 20px 0 -8px; font-size: 16px; font-weight: 600; color: var(--muted); }
 .total-line b { color: var(--brand); font-size: 22px; font-weight: 800; margin-left: 6px; }
 
-/* product page: keep photo, price, weight, total and buttons in one screen on desktop */
-@media (min-width: 901px) {
-  #product > .crumbs { margin: 14px 0 12px; }
-  .pd { grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 36px; padding: 22px; align-items: start; }
-  .pd-img { position: sticky; top: calc(var(--header-h, 140px) + 16px); width: min(100%, max(320px, calc(100vh - 250px))); margin: 0 auto; }
-  .pd-img .pimg.big { width: 100%; aspect-ratio: 1; }
-  .pd h1 { font-size: 28px; margin: 4px 0 8px; }
+
+.pd { margin-top: 20px; }
+
+/* product page: photo | details | side panel — everything in one view on desktop */
+.pd-side { display: grid; gap: 16px; align-content: start; }
+.pd-side .perks { margin: 0; padding: 6px 16px; border: 1px solid var(--line); border-radius: 12px; gap: 0; }
+.pd-side .perks li { padding: 12px 0; }
+.pd-side .perks li + li { border-top: 1px solid var(--line); }
+.seller-box { border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; }
+.seller-box small { color: var(--muted); margin-bottom: 12px; }
+.seller-box .btn { background: #1fa855; }
+.seller-box .btn:hover { background: #1a9149; }
+@media (min-width: 1101px) {
+  .pd { grid-template-columns: 380px minmax(0, 1fr) 270px; gap: 32px; padding: 24px; align-items: start; margin-top: 20px; }
+  .pd h1 { font-size: 26px; margin: 4px 0 8px; }
   .pd .meta { font-size: 13.5px; }
   .price.big { font-size: 28px; margin: 12px 0; }
   .sizes { margin: 0 0 12px; }
@@ -538,8 +546,11 @@ select { padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); 
   .total-line b { font-size: 20px; }
   .qty-row { margin: 14px 0 12px; }
   .qty { height: 46px; }
+  .qty-row .btn { padding: 12px 16px; min-width: 120px; }
   .share { margin-top: 12px; }
-  .perks { margin-top: 16px; padding-top: 14px; gap: 10px; }
+  .sh { width: 34px; height: 34px; }
 }
-
-.pd { margin-top: 20px; }
+@media (min-width: 901px) and (max-width: 1100px) {
+  .pd { grid-template-columns: 1fr 1fr; }
+  .pd-side { grid-column: 1 / -1; grid-template-columns: 1fr 1fr; }
+}
