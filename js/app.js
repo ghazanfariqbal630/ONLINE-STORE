@@ -42,6 +42,7 @@ function cartTotals() {
 function updateBadges() {
   const c = $("#cartCount"), w = $("#wishCount"), t = $("#cartTotal");
   if (c) c.textContent = cartTotals().count;
+  if ($("#cartCount2")) $("#cartCount2").textContent = cartTotals().count;
   if (w) w.textContent = wishlist.length;
   if (t) t.textContent = money(cartTotals().subtotal);
 }
@@ -100,6 +101,7 @@ function renderHeader() {
   </div>
   <div class="mainbar">
     <div class="wrap">
+      <button class="burger" onclick="toggleDrawer(true)" aria-label="Open menu">${icon("menu", 24)}</button>
       <a href="index.html" class="logo">${LOGO_SVG}<span>Asaan <em>Digital</em> Bazaar</span></a>
       <form class="search" action="shop.html">
         <input name="q" placeholder="Search products, brands and categories" value="${params.get("q") || ""}" aria-label="Search">
@@ -128,7 +130,40 @@ function renderHeader() {
       <a href="#contact">Contact</a>
     </div>
   </nav>`;
+
+  // mobile: slide-in drawer + bottom tab bar
+  document.body.insertAdjacentHTML("beforeend", `
+  <div class="drawer-bg" onclick="toggleDrawer(false)"></div>
+  <aside class="drawer" aria-label="Menu">
+    <div class="drawer-head">
+      <a href="index.html" class="logo">${LOGO_SVG}<span>Asaan <em>Digital</em> Bazaar</span></a>
+      <button onclick="toggleDrawer(false)" aria-label="Close menu">${icon("x", 22)}</button>
+    </div>
+    <nav>
+      <a href="index.html">${icon("home", 20)} Home</a>
+      <a href="shop.html">${icon("bag", 20)} All Products</a>
+      <a href="shop.html?sale=1">${icon("gems", 20)} Discounted</a>
+      <a href="shop.html?sort=new">${icon("badge", 20)} New Arrivals</a>
+      <a href="shop.html?wish=1">${icon("heart", 20)} My Wishlist</a>
+      <h4>Categories</h4>
+      ${CATEGORIES.map((c) => `<a href="shop.html?cat=${c.id}">${icon(c.id, 20)} ${c.name}</a>`).join("")}
+    </nav>
+    <div class="drawer-foot">
+      <a href="tel:${STORE.phone.replace(/\s/g, "")}">${icon("phone", 18)} ${STORE.phone}</a>
+      <a href="mailto:${STORE.email}">${icon("mail", 18)} ${STORE.email}</a>
+    </div>
+  </aside>
+  <nav class="tabbar" aria-label="Quick links">
+    <a href="index.html" class="${here === "index.html" ? "on" : ""}">${icon("home", 22)}<span>Home</span></a>
+    <button onclick="toggleDrawer(true)">${icon("menu", 22)}<span>Categories</span></button>
+    <a href="cart.html" class="${here === "cart.html" ? "on" : ""}"><i>${icon("bag", 22)}<b id="cartCount2">0</b></i><span>Cart</span></a>
+    <a href="https://wa.me/${STORE.whatsapp}" target="_blank" rel="noopener" class="wa">${WHATSAPP_SVG.replace(/28/g, "22").replace('fill="#fff"', 'fill="currentColor"')}<span>WhatsApp</span></a>
+  </nav>`);
   updateBadges();
+}
+
+function toggleDrawer(open) {
+  document.body.classList.toggle("drawer-open", open);
 }
 
 function renderFooter() {
@@ -185,6 +220,73 @@ function homePage() {
   section("new", "#newArrivals");
   section("best", "#bestSelling");
   section("top", "#topRated");
+  $("#flashGrid").innerHTML = PRODUCTS.filter((p) => p.old).sort((a, b) => b.old - b.price - (a.old - a.price)).slice(0, 4).map(productCard).join("");
+
+  const sellers = {};
+  PRODUCTS.forEach((p) => (sellers[p.seller] ??= []).push(p));
+  $("#sellers").innerHTML = Object.entries(sellers).sort((a, b) => b[1].length - a[1].length).slice(0, 6).map(([name, items]) => `
+    <a class="seller" href="shop.html?q=${encodeURIComponent(name)}">
+      <span class="avatar">${name.split(" ").map((w) => w[0]).slice(0, 2).join("")}</span>
+      <b>${name}</b>
+      <small>${stars(items.reduce((s, p) => s + p.rating, 0) / items.length)} · ${items.length} products</small>
+    </a>`).join("");
+
+  if (REVIEWS.length) {
+    $("#reviews").innerHTML = REVIEWS.map((r) => `
+      <figure class="review">
+        <div class="stars">${icon("star", 16).repeat(r.rating)}</div>
+        <blockquote>“${r.text}”</blockquote>
+        <figcaption><span class="avatar sm">${r.name[0]}</span><span><b>${r.name}</b><small>${r.city}</small></span></figcaption>
+      </figure>`).join("");
+  } else {
+    $("#reviews").closest(".sec").remove();
+  }
+
+  $("#insta").innerHTML = PRODUCTS.slice(0, 8).map((p) => `<a href="product.html?id=${p.id}" aria-label="${p.name}">${productImage(p)}<span>${icon("bag", 22)}</span></a>`).join("");
+
+  initSlider();
+  initCountdown();
+}
+
+function initSlider() {
+  const slides = [...document.querySelectorAll("#slider .slide")];
+  let i = 0, timer;
+  $("#dots").innerHTML = slides.map((_, n) => `<button aria-label="Slide ${n + 1}" data-go="${n}"></button>`).join("");
+  const dots = [...document.querySelectorAll("#dots button")];
+  const go = (n) => {
+    i = (n + slides.length) % slides.length;
+    slides.forEach((s, k) => s.classList.toggle("active", k === i));
+    dots.forEach((d, k) => d.classList.toggle("active", k === i));
+    clearInterval(timer);
+    timer = setInterval(() => go(i + 1), 5500);
+  };
+  dots.forEach((d) => (d.onclick = () => go(+d.dataset.go)));
+  document.querySelectorAll("[data-sl]").forEach((b) => {
+    b.innerHTML = icon("chevron", 22);
+    b.onclick = () => go(i + +b.dataset.sl);
+  });
+  let x0 = null;
+  $("#slider").addEventListener("touchstart", (e) => (x0 = e.touches[0].clientX), { passive: true });
+  $("#slider").addEventListener("touchend", (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+  go(0);
+}
+
+function initCountdown() {
+  const box = $("#countdown");
+  const end = new Date(STORE.saleEnds).getTime();
+  const tick = () => {
+    const left = end - Date.now();
+    if (!(left > 0)) { box.remove(); return false; }
+    const parts = [Math.floor(left / 864e5), Math.floor(left / 36e5) % 24, Math.floor(left / 6e4) % 60, Math.floor(left / 1e3) % 60];
+    box.innerHTML = `<span class="ends">Ends in</span>` + parts.map((v, k) => `<span class="cd"><b>${String(v).padStart(2, "0")}</b><small>${["Days", "Hrs", "Min", "Sec"][k]}</small></span>`).join("");
+    return true;
+  };
+  if (tick()) setInterval(tick, 1000);
 }
 
 function shopPage() {
@@ -201,7 +303,7 @@ function shopPage() {
     let list = PRODUCTS.filter(
       (p) =>
         (!cat || p.cat === cat) &&
-        (!q || (p.name + p.desc + catById(p.cat).name).toLowerCase().includes(q)) &&
+        (!q || (p.name + p.desc + p.seller + catById(p.cat).name).toLowerCase().includes(q)) &&
         (!params.get("sale") || p.old) &&
         (!params.get("wish") || wishlist.includes(p.id))
     );
@@ -321,6 +423,7 @@ function pinHeader() {
 pinHeader();
 addEventListener("resize", pinHeader);
 addEventListener("scroll", () => $("#header").classList.toggle("scrolled", scrollY > 40), { passive: true });
+document.querySelectorAll("[data-ic]").forEach((el) => (el.outerHTML = icon(el.dataset.ic, 26)));
 document.querySelectorAll("[data-arrow]").forEach((el) => (el.outerHTML = icon("arrow", 16)));
 document.querySelectorAll("[data-icon]").forEach((el) => el.insertAdjacentHTML("afterbegin", icon(el.dataset.icon, 160, "bg")));
 const page = document.body.dataset.page;
