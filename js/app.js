@@ -384,10 +384,20 @@ function shareBar(p) {
   return `
   <div class="share">
     <span class="share-label">${icon("share", 18)} Share</span>
-    ${links.map(([k, label, href, svg]) => `<a class="sh sh-${k}" href="${href}" target="_blank" rel="noopener" title="Share on ${label}" aria-label="Share on ${label}">${svg}</a>`).join("")}
+    ${links.map(([k, label, href, svg]) => `<a class="sh sh-${k}" href="${href}" target="_blank" rel="noopener" title="Share on ${label}" aria-label="Share on ${label}"${k === "email" ? "" : ` onclick="return sharePopup(this.href)"`}>${svg}</a>`).join("")}
     <button class="sh sh-copy" onclick="copyLink(this)" title="Copy link" aria-label="Copy link">${icon("link", 18)}</button>
     ${navigator.share ? `<button class="sh sh-more" onclick="navigator.share({title:document.title,text:${JSON.stringify(text).replace(/"/g, "&quot;")},url:location.href}).catch(()=>{})" title="More apps" aria-label="More share options">${icon("share", 18)}</button>` : ""}
   </div>`;
+}
+
+// On desktop open the share screen in a small centred window; phones keep the normal new tab / app
+function sharePopup(href) {
+  if (innerWidth < 768) return true;
+  const w = 620, h = 560;
+  const win = open(href, "share", `width=${w},height=${h},left=${screenX + (outerWidth - w) / 2},top=${screenY + (outerHeight - h) / 2}`);
+  if (!win) return true;
+  win.focus();
+  return false;
 }
 
 function copyLink(btn) {
