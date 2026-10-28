@@ -204,7 +204,7 @@ function renderFooter() {
         <h4>Contact Us</h4>
         <a href="tel:${STORE.phone.replace(/\s/g, "")}">${icon("phone", 16)} ${STORE.phone}</a>
         <a href="mailto:${STORE.email}">${icon("mail", 16)} ${STORE.email}</a>
-        <span class="addr">${icon("pin", 16)} ${STORE.address}</span>
+        ${STORE.address ? `<span class="addr">${icon("pin", 16)} ${STORE.address}</span>` : ""}
       </div>
       <div>
         <h4>Newsletter</h4>
@@ -484,7 +484,7 @@ function contactPage() {
     <a href="https://wa.me/${STORE.whatsapp}" target="_blank" rel="noopener">${icon("phone", 24)}<span><b>WhatsApp</b><small>${STORE.phone}</small></span></a>
     <a href="tel:${STORE.phone.replace(/\s/g, "")}">${icon("headset", 24)}<span><b>Call us</b><small>${STORE.phone}</small></span></a>
     <a href="mailto:${STORE.email}">${icon("mail", 24)}<span><b>Email</b><small>${STORE.email}</small></span></a>
-    <div>${icon("pin", 24)}<span><b>Address</b><small>${STORE.address}</small></span></div>`;
+    ${STORE.address ? `<div>${icon("pin", 24)}<span><b>Address</b><small>${STORE.address}</small></span></div>` : ""}`;
   $("#contactForm").onsubmit = (e) => {
     e.preventDefault();
     const f = Object.fromEntries(new FormData(e.target));

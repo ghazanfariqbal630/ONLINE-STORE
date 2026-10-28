@@ -5,7 +5,7 @@ const STORE = {
   phone: "+92 306 6088303",
   whatsapp: "923066088303", // country code + number, no + or spaces
   email: "ghazanfariqbal630@gmail.com",
-  address: "Your address, City, Pakistan",
+  address: "", // leave empty to hide the address line
   currency: "PKR",
   deliveryFee: 250,
   freeDeliveryOver: 5000,
