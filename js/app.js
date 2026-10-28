@@ -343,7 +343,6 @@ function productPage() {
   const off = p.old ? Math.round((1 - p.price / p.old) * 100) : 0;
   const related = PRODUCTS.filter((x) => x.cat === p.cat && x.id !== p.id).concat(PRODUCTS.filter((x) => x.cat !== p.cat)).slice(0, 4);
   box.innerHTML = `
-  <nav class="crumbs"><a href="index.html">Home</a>${icon("chevron", 14)}<a href="shop.html?cat=${p.cat}">${catById(p.cat).name}</a>${icon("chevron", 14)}<span>${p.name}</span></nav>
   <div class="pd">
     <div class="pd-img">${off ? `<span class="badge-off">-${off}%</span>` : ""}${productImage(p, "big")}</div>
     <div class="pd-info">
