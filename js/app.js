@@ -127,7 +127,7 @@ function renderHeader() {
       <a href="shop.html?sale=1">Discounted</a>
       <a href="shop.html?sort=new">New Arrivals</a>
       <a href="shop.html?sort=rating">Top Rated</a>
-      <a href="#contact">Contact</a>
+      <a href="contact.html">Contact</a>
     </div>
   </nav>`;
 
@@ -174,6 +174,11 @@ function renderFooter() {
     <div>${icon("return", 28)}<span><b>7 Days Return</b><small>Hassle-free returns</small></span></div>
     <div>${icon("badge", 28)}<span><b>100% Authentic</b><small>Quality checked</small></span></div>
   </section>
+  <section class="info-cards wrap">
+    <a href="about.html">${icon("building", 40)}<b>About us</b><small>Know more about our company</small></a>
+    <a href="contact.html">${icon("headset", 40)}<b>Contact Us</b><small>We are here to help</small></a>
+    <a href="faq.html">${icon("help", 40)}<b>FAQ</b><small>Get all answers</small></a>
+  </section>
   <footer class="footer" id="contact">
     <div class="wrap cols">
       <div>
@@ -186,6 +191,8 @@ function renderFooter() {
         <a href="shop.html?sale=1">Discounted Products</a>
         <a href="shop.html?sort=rating">Top Rated</a>
         <a href="cart.html">My Cart</a>
+        <a href="about.html">About Us</a>
+        <a href="faq.html">FAQ</a>
       </div>
       <div>
         <h4>Contact Us</h4>
@@ -411,6 +418,21 @@ function cartPage() {
   };
 }
 
+function contactPage() {
+  $("#contactGrid").innerHTML = `
+    <a href="https://wa.me/${STORE.whatsapp}" target="_blank" rel="noopener">${icon("phone", 24)}<span><b>WhatsApp</b><small>${STORE.phone}</small></span></a>
+    <a href="tel:${STORE.phone.replace(/\s/g, "")}">${icon("headset", 24)}<span><b>Call us</b><small>${STORE.phone}</small></span></a>
+    <a href="mailto:${STORE.email}">${icon("mail", 24)}<span><b>Email</b><small>${STORE.email}</small></span></a>
+    <div>${icon("pin", 24)}<span><b>Address</b><small>${STORE.address}</small></span></div>`;
+  $("#contactForm").onsubmit = (e) => {
+    e.preventDefault();
+    const f = Object.fromEntries(new FormData(e.target));
+    window.open(`https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(`Assalam o Alaikum, I am ${f.name} (${f.phone}).\n\n${f.msg}`)}`, "_blank");
+    e.target.reset();
+    toast("Opening WhatsApp…");
+  };
+}
+
 // ---------- boot ----------
 renderHeader();
 renderFooter();
@@ -426,4 +448,4 @@ document.querySelectorAll("[data-ic]").forEach((el) => (el.outerHTML = icon(el.d
 document.querySelectorAll("[data-arrow]").forEach((el) => (el.outerHTML = icon("arrow", 16)));
 document.querySelectorAll("[data-icon]").forEach((el) => el.insertAdjacentHTML("afterbegin", icon(el.dataset.icon, 160, "bg")));
 const page = document.body.dataset.page;
-({ home: homePage, shop: shopPage, product: productPage, cart: cartPage })[page]?.();
+({ home: homePage, shop: shopPage, product: productPage, cart: cartPage, contact: contactPage })[page]?.();
