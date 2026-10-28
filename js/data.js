@@ -27,7 +27,7 @@ const CATEGORIES = [
 // Or set image: "images/any-name.jpg". If no photo is found, the icon is shown instead.
 const PRODUCTS = [
   { id: 17, name: "Premium Almonds (Badam) — Without Shell", cat: "organic", price: 1600, old: 0, icon: "🌰", image: "images/almonds.webp", rating: 0, seller: "Asaan Digital Bazaar", tags: ["featured", "new", "best"],
-    variants: [{ label: "500g", price: 1600 }, { label: "1 KG", price: 3200 }],
+    variantLabel: "Weight", variants: [{ label: "500g", price: 1600 }, { label: "1 KG", price: 3200 }],
     desc: "Fresh, premium-quality almonds without shell — 100% natural, rich in nutrients, good for the heart and great for brain health. Packed fresh in a resealable pouch." },
   { id: 1, name: "Men's Aqeeq Ring, 925 Sterling Silver", cat: "jewelry", price: 12999, old: 15999, icon: "💍", image: "", rating: 4.8, seller: "Silver Craft House", tags: ["featured", "best"], desc: "Handcrafted 925 sterling silver ring set with natural red Aqeeq (agate). Polished finish, available in all sizes." },
   { id: 2, name: "Pure White Pashmina Shawl", cat: "fashion", price: 5200, old: 5600, icon: "🧣", image: "", rating: 4.9, seller: "Valley Weavers", tags: ["featured", "new"], desc: "Soft, warm hand-woven pashmina shawl in pure white. Lightweight and perfect for winter evenings and gifting." },

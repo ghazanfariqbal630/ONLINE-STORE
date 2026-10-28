@@ -519,3 +519,5 @@ select { padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); 
 .size:hover { border-color: var(--brand); }
 .size.on { border-color: var(--brand); background: var(--gold-soft); color: var(--brand); }
 .price .from { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 2px; }
+.total-line { margin: 20px 0 -8px; font-size: 16px; font-weight: 600; color: var(--muted); }
+.total-line b { color: var(--brand); font-size: 22px; font-weight: 800; margin-left: 6px; }

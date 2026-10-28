@@ -351,10 +351,11 @@ function productPage() {
       <h1>${p.name}</h1>
       <div class="meta">${stars(p.rating)}<span class="muted">Sold by <b>${p.seller}</b></span><span class="stock">● In stock</span></div>
       <div class="price big" id="pdPrice"></div>
-      ${p.variants ? `<div class="sizes"><span>Size</span>${p.variants.map((v, k) => `<button class="size ${k ? "" : "on"}" data-v="${k}" onclick="pickSize(${p.id}, ${k})">${v.label}</button>`).join("")}</div>` : ""}
+      ${p.variants ? `<div class="sizes"><span>${p.variantLabel || "Size"}</span>${p.variants.map((v, k) => `<button class="size ${k ? "" : "on"}" data-v="${k}" onclick="pickSize(${p.id}, ${k})">${v.label}</button>`).join("")}</div>` : ""}
       <p class="desc">${p.desc}</p>
+      <div class="total-line">Total Price: <b id="pdTotal"></b></div>
       <div class="qty-row">
-        <div class="qty"><button onclick="q.value=Math.max(1,q.value-1)" aria-label="Less">${icon("minus", 16)}</button><input id="q" type="number" min="1" value="1" aria-label="Quantity"><button onclick="q.value=+q.value+1" aria-label="More">${icon("plus", 16)}</button></div>
+        <div class="qty"><button onclick="q.value=Math.max(1,q.value-1);updateTotal()" aria-label="Less">${icon("minus", 16)}</button><input id="q" type="number" min="1" value="1" aria-label="Quantity" oninput="updateTotal()"><button onclick="q.value=+q.value+1;updateTotal()" aria-label="More">${icon("plus", 16)}</button></div>
         <button class="btn grow" onclick="addToCart(${p.id}, Math.max(1, +$('#q').value), pickedSize)">${icon("cart", 18)} Add to cart</button>
         <button class="btn btn-gold grow" onclick="addToCart(${p.id}, Math.max(1, +$('#q').value), pickedSize); location.href='cart.html'">Buy now</button>
       </div>
@@ -375,12 +376,18 @@ function productPage() {
   pickSize(p.id, 0);
 }
 
-let pickedSize = 0;
+let pickedSize = 0, pickedPrice = 0;
 function pickSize(id, v) {
   pickedSize = v;
   const { price, old } = variantOf(productById(id), v);
+  pickedPrice = price;
   $("#pdPrice").innerHTML = `${money(price)} ${old ? `<s>${money(old)}</s> <span class="save">Save ${money(old - price)}</span>` : ""}`;
   document.querySelectorAll(".size").forEach((b) => b.classList.toggle("on", +b.dataset.v === v));
+  updateTotal();
+}
+function updateTotal() {
+  const qty = Math.max(1, Math.floor(+$("#q").value) || 1);
+  $("#pdTotal").textContent = money(pickedPrice * qty);
 }
 
 // Share links open each app's own share screen — no third-party share widget or tracking
