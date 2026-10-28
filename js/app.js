@@ -355,6 +355,7 @@ function productPage() {
         <button class="link wish-link ${wishlist.includes(p.id) ? "on" : ""}" data-wish="${p.id}" onclick="toggleWish(${p.id})">${icon("heart", 18)} Add to wishlist</button>
         <a class="link" href="https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent("Assalam o Alaikum, I want to ask about: " + p.name)}" target="_blank" rel="noopener">${icon("phone", 18)} Ask on WhatsApp</a>
       </div>
+      ${shareBar(p)}
       <ul class="perks">
         <li>${icon("truck", 20)}<span><b>Delivery in 3–5 working days</b>All over Pakistan</span></li>
         <li>${icon("cash", 20)}<span><b>Cash on Delivery</b>Pay when you receive</span></li>
@@ -364,6 +365,34 @@ function productPage() {
   </div>
   <div class="sec-head"><h2 class="sec-title">You may also like</h2></div>
   <div class="grid">${related.map(productCard).join("")}</div>`;
+}
+
+// Share links open each app's own share screen — no third-party share widget or tracking
+function shareBar(p) {
+  const url = location.href.split("#")[0];
+  const text = `${p.name} — ${money(p.price)} | ${STORE.name}`;
+  const u = encodeURIComponent(url), t = encodeURIComponent(text);
+  const img = encodeURIComponent(new URL(p.image || `images/${p.id}.jpg`, location.href).href);
+  const links = [
+    ["whatsapp", "WhatsApp", `https://wa.me/?text=${encodeURIComponent(text + "\n" + url)}`, WHATSAPP_SVG.replace(/28/g, "18")],
+    ["facebook", "Facebook", `https://www.facebook.com/sharer/sharer.php?u=${u}`, brand("facebook")],
+    ["x", "X", `https://twitter.com/intent/tweet?text=${t}&url=${u}`, brand("x", 16)],
+    ["telegram", "Telegram", `https://t.me/share/url?url=${u}&text=${t}`, brand("telegram")],
+    ["pinterest", "Pinterest", `https://pinterest.com/pin/create/button/?url=${u}&media=${img}&description=${t}`, brand("pinterest")],
+    ["email", "Email", `mailto:?subject=${t}&body=${encodeURIComponent(text + "\n" + url)}`, icon("mail", 18)],
+  ];
+  return `
+  <div class="share">
+    <span class="share-label">${icon("share", 18)} Share</span>
+    ${links.map(([k, label, href, svg]) => `<a class="sh sh-${k}" href="${href}" target="_blank" rel="noopener" title="Share on ${label}" aria-label="Share on ${label}">${svg}</a>`).join("")}
+    <button class="sh sh-copy" onclick="copyLink(this)" title="Copy link" aria-label="Copy link">${icon("link", 18)}</button>
+    ${navigator.share ? `<button class="sh sh-more" onclick="navigator.share({title:document.title,text:${JSON.stringify(text).replace(/"/g, "&quot;")},url:location.href}).catch(()=>{})" title="More apps" aria-label="More share options">${icon("share", 18)}</button>` : ""}
+  </div>`;
+}
+
+function copyLink(btn) {
+  const done = () => { toast("Link copied!"); btn.classList.add("ok"); setTimeout(() => btn.classList.remove("ok"), 1500); };
+  navigator.clipboard?.writeText(location.href).then(done, () => prompt("Copy this link:", location.href)) ?? prompt("Copy this link:", location.href);
 }
 
 function cartPage() {

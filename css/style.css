@@ -495,3 +495,19 @@ select { padding: 9px 12px; border-radius: 10px; border: 1px solid var(--line); 
   .page-body { padding: 22px 18px; margin-top: 18px; }
   .contact-grid { grid-template-columns: 1fr; }
 }
+
+/* share buttons on product page */
+.share { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+.share-label { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 600; color: var(--muted); margin-right: 4px; }
+.sh { width: 38px; height: 38px; border-radius: 50%; border: 0; display: grid; place-items: center; color: #fff; cursor: pointer; transition: transform .15s, filter .15s; }
+.sh:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.sh svg { fill: currentColor; }
+.sh .ic { fill: none; }
+.sh-whatsapp { background: #25d366; }
+.sh-facebook { background: #1877f2; }
+.sh-x { background: #000; }
+.sh-telegram { background: #229ed9; }
+.sh-pinterest { background: #e60023; }
+.sh-email { background: #6b7280; }
+.sh-copy, .sh-more { background: var(--bg); color: var(--text); border: 1px solid var(--line); }
+.sh-copy.ok { background: var(--ok); color: #fff; border-color: var(--ok); }
