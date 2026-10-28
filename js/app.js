@@ -315,7 +315,6 @@ function shopPage() {
 
     const title = params.get("wish") ? "My Wishlist" : params.get("sale") ? "Discounted Products" : q ? `Results for “${q}”` : cat ? catById(cat).name : "All Products";
     $("#shopTitle").textContent = title;
-    $("#crumb").textContent = title;
     $("#count").textContent = `${list.length} product${list.length === 1 ? "" : "s"} found`;
     $("#shopGrid").innerHTML = list.length ? list.map(productCard).join("") : `<div class="empty">${icon("search", 40)}<p>No products found.</p><a class="btn" href="shop.html">View all products</a></div>`;
   }
