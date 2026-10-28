@@ -26,6 +26,9 @@ const CATEGORIES = [
 // PHOTOS: save the photo in the "images" folder named by product id — e.g. images/1.jpg for id 1.
 // Or set image: "images/any-name.jpg". If no photo is found, the icon is shown instead.
 const PRODUCTS = [
+  { id: 17, name: "Premium Almonds (Badam) — Without Shell", cat: "organic", price: 1600, old: 0, icon: "🌰", image: "images/almonds.webp", rating: 0, seller: "Asaan Digital Bazaar", tags: ["featured", "new", "best"],
+    variants: [{ label: "500g", price: 1600 }, { label: "1 KG", price: 3200 }],
+    desc: "Fresh, premium-quality almonds without shell — 100% natural, rich in nutrients, good for the heart and great for brain health. Packed fresh in a resealable pouch." },
   { id: 1, name: "Men's Aqeeq Ring, 925 Sterling Silver", cat: "jewelry", price: 12999, old: 15999, icon: "💍", image: "", rating: 4.8, seller: "Silver Craft House", tags: ["featured", "best"], desc: "Handcrafted 925 sterling silver ring set with natural red Aqeeq (agate). Polished finish, available in all sizes." },
   { id: 2, name: "Pure White Pashmina Shawl", cat: "fashion", price: 5200, old: 5600, icon: "🧣", image: "", rating: 4.9, seller: "Valley Weavers", tags: ["featured", "new"], desc: "Soft, warm hand-woven pashmina shawl in pure white. Lightweight and perfect for winter evenings and gifting." },
   { id: 3, name: "Pure Himalayan Shilajit (20g)", cat: "organic", price: 3000, old: 0, icon: "🫙", image: "", rating: 4.7, seller: "Mountain Organics", tags: ["best", "top"], desc: "Lab-tested, purified resin form shilajit sourced from high-altitude rocks. A natural mineral supplement." },

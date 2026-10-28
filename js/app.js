@@ -13,18 +13,23 @@ function save(key, val) {
 }
 
 // ---------- cart & wishlist ----------
-let cart = load("cart", []); // [{id, qty}]
+let cart = load("cart", []).filter((i) => productById(i.id)); // [{id, qty, v}] — v = size/variant index
 let wishlist = load("wishlist", []); // [id]
 
-function addToCart(id, qty = 1) {
-  const item = cart.find((i) => i.id === id);
-  item ? (item.qty += qty) : cart.push({ id, qty });
+// A product may have sizes: variants: [{ label: "500g", price: 1600, old: 0 }, ...]
+const variantOf = (p, v = 0) => (p.variants ? p.variants[v] || p.variants[0] : { label: "", price: p.price, old: p.old });
+const itemLabel = (i) => { const p = productById(i.id), l = variantOf(p, i.v).label; return l ? `${p.name} (${l})` : p.name; };
+
+function addToCart(id, qty = 1, v = 0) {
+  const item = cart.find((i) => i.id === id && (i.v || 0) === v);
+  item ? (item.qty += qty) : cart.push({ id, qty, v });
   save("cart", cart);
   updateBadges();
-  toast(`Added to cart — ${productById(id).name}`);
+  toast(`Added to cart — ${itemLabel({ id, v })}`);
 }
-function setQty(id, qty) {
-  cart = qty > 0 ? cart.map((i) => (i.id === id ? { ...i, qty } : i)) : cart.filter((i) => i.id !== id);
+function setQty(id, qty, v = 0) {
+  const same = (i) => i.id === id && (i.v || 0) === v;
+  cart = qty > 0 ? cart.map((i) => (same(i) ? { ...i, qty } : i)) : cart.filter((i) => !same(i));
   save("cart", cart);
   updateBadges();
 }
@@ -35,7 +40,7 @@ function toggleWish(id) {
   document.querySelectorAll(`[data-wish="${id}"]`).forEach((b) => b.classList.toggle("on", wishlist.includes(id)));
 }
 function cartTotals() {
-  const subtotal = cart.reduce((s, i) => s + productById(i.id).price * i.qty, 0);
+  const subtotal = cart.reduce((s, i) => s + variantOf(productById(i.id), i.v).price * i.qty, 0);
   const delivery = subtotal === 0 || subtotal >= STORE.freeDeliveryOver ? 0 : STORE.deliveryFee;
   return { subtotal, delivery, total: subtotal + delivery, count: cart.reduce((s, i) => s + i.qty, 0) };
 }
@@ -65,6 +70,7 @@ function productImage(p, cls = "") {
 }
 
 function stars(r) {
+  if (!r) return "";
   return `<span class="stars">${icon("star", 14)}<b>${r.toFixed(1)}</b></span>`;
 }
 
@@ -82,7 +88,7 @@ function productCard(p) {
       <span class="pcat">${catById(p.cat).name}</span>
       <a href="product.html?id=${p.id}" class="pname">${p.name}</a>
       ${stars(p.rating)}
-      <div class="price">${money(p.price)} ${p.old ? `<s>${money(p.old)}</s>` : ""}</div>
+      <div class="price">${p.variants ? `<small class="from">${p.variants.map((v) => v.label).join(" · ")}</small>` : ""}${money(p.price)} ${p.old ? `<s>${money(p.old)}</s>` : ""}</div>
     </div>
   </article>`;
 }
@@ -344,12 +350,13 @@ function productPage() {
       <span class="pcat">${catById(p.cat).name}</span>
       <h1>${p.name}</h1>
       <div class="meta">${stars(p.rating)}<span class="muted">Sold by <b>${p.seller}</b></span><span class="stock">● In stock</span></div>
-      <div class="price big">${money(p.price)} ${p.old ? `<s>${money(p.old)}</s> <span class="save">Save ${money(p.old - p.price)}</span>` : ""}</div>
+      <div class="price big" id="pdPrice"></div>
+      ${p.variants ? `<div class="sizes"><span>Size</span>${p.variants.map((v, k) => `<button class="size ${k ? "" : "on"}" data-v="${k}" onclick="pickSize(${p.id}, ${k})">${v.label}</button>`).join("")}</div>` : ""}
       <p class="desc">${p.desc}</p>
       <div class="qty-row">
         <div class="qty"><button onclick="q.value=Math.max(1,q.value-1)" aria-label="Less">${icon("minus", 16)}</button><input id="q" type="number" min="1" value="1" aria-label="Quantity"><button onclick="q.value=+q.value+1" aria-label="More">${icon("plus", 16)}</button></div>
-        <button class="btn grow" onclick="addToCart(${p.id}, Math.max(1, +$('#q').value))">${icon("cart", 18)} Add to cart</button>
-        <button class="btn btn-gold grow" onclick="addToCart(${p.id}, Math.max(1, +$('#q').value)); location.href='cart.html'">Buy now</button>
+        <button class="btn grow" onclick="addToCart(${p.id}, Math.max(1, +$('#q').value), pickedSize)">${icon("cart", 18)} Add to cart</button>
+        <button class="btn btn-gold grow" onclick="addToCart(${p.id}, Math.max(1, +$('#q').value), pickedSize); location.href='cart.html'">Buy now</button>
       </div>
       <div class="pd-actions">
         <button class="link wish-link ${wishlist.includes(p.id) ? "on" : ""}" data-wish="${p.id}" onclick="toggleWish(${p.id})">${icon("heart", 18)} Add to wishlist</button>
@@ -365,6 +372,15 @@ function productPage() {
   </div>
   <div class="sec-head"><h2 class="sec-title">You may also like</h2></div>
   <div class="grid">${related.map(productCard).join("")}</div>`;
+  pickSize(p.id, 0);
+}
+
+let pickedSize = 0;
+function pickSize(id, v) {
+  pickedSize = v;
+  const { price, old } = variantOf(productById(id), v);
+  $("#pdPrice").innerHTML = `${money(price)} ${old ? `<s>${money(old)}</s> <span class="save">Save ${money(old - price)}</span>` : ""}`;
+  document.querySelectorAll(".size").forEach((b) => b.classList.toggle("on", +b.dataset.v === v));
 }
 
 // Share links open each app's own share screen — no third-party share widget or tracking
@@ -417,13 +433,13 @@ function cartPage() {
     <div class="cart-items">
       <div class="cart-head"><span>Product</span><span>Quantity</span><span>Total</span></div>
       ${cart.map((i) => {
-        const p = productById(i.id);
+        const p = productById(i.id), v = i.v || 0, { price } = variantOf(p, v);
         return `<div class="citem">
           <a href="product.html?id=${p.id}">${productImage(p, "thumb")}</a>
-          <div class="cinfo"><a href="product.html?id=${p.id}" class="pname">${p.name}</a><span class="muted">${money(p.price)} each</span></div>
-          <div class="qty"><button onclick="setQty(${p.id},${i.qty - 1});cartPage()" aria-label="Less">${icon("minus", 16)}</button><input value="${i.qty}" readonly aria-label="Quantity"><button onclick="setQty(${p.id},${i.qty + 1});cartPage()" aria-label="More">${icon("plus", 16)}</button></div>
-          <b class="ctotal">${money(p.price * i.qty)}</b>
-          <button class="remove" onclick="setQty(${p.id},0);cartPage()" aria-label="Remove">${icon("x", 18)}</button>
+          <div class="cinfo"><a href="product.html?id=${p.id}" class="pname">${itemLabel(i)}</a><span class="muted">${money(price)} each</span></div>
+          <div class="qty"><button onclick="setQty(${p.id},${i.qty - 1},${v});cartPage()" aria-label="Less">${icon("minus", 16)}</button><input value="${i.qty}" readonly aria-label="Quantity"><button onclick="setQty(${p.id},${i.qty + 1},${v});cartPage()" aria-label="More">${icon("plus", 16)}</button></div>
+          <b class="ctotal">${money(price * i.qty)}</b>
+          <button class="remove" onclick="setQty(${p.id},0,${v});cartPage()" aria-label="Remove">${icon("x", 18)}</button>
         </div>`;
       }).join("")}
     </div>
@@ -449,7 +465,7 @@ function cartPage() {
   $("#checkout").onsubmit = (e) => {
     e.preventDefault();
     const f = Object.fromEntries(new FormData(e.target));
-    const lines = cart.map((i) => `• ${productById(i.id).name} x${i.qty} = ${money(productById(i.id).price * i.qty)}`).join("\n");
+    const lines = cart.map((i) => `• ${itemLabel(i)} x${i.qty} = ${money(variantOf(productById(i.id), i.v).price * i.qty)}`).join("\n");
     const msg = `New order — ${STORE.name}\n\n${lines}\n\nSubtotal: ${money(t.subtotal)}\nDelivery: ${t.delivery ? money(t.delivery) : "Free"}\nTotal: ${money(t.total)}\n\nName: ${f.name}\nPhone: ${f.phone}\nCity: ${f.city}\nAddress: ${f.address}\nPayment: ${f.pay}`;
     window.open(`https://wa.me/${STORE.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
     cart = []; save("cart", cart); updateBadges();
